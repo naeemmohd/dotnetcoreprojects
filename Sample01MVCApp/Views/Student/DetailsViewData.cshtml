@@ -1,0 +1,38 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<head>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <h1>@ViewData["Header"]</h1>
+    <br />
+    <br />
+    @{
+        var student = ViewData["Student"] as Student;
+    }
+    <table>
+        <tr>
+            <td>Student ID: </td>
+            <td>@student.StudentId</td>
+        </tr>
+        <tr>
+            <td>Name: </td>
+            <td>@student.Name</td>
+        </tr>
+        <tr>
+            <td>Gender: </td>
+            <td>@student.Gender </td>
+        </tr>
+        <tr>
+            <td>Branch: </td>
+            <td>@student.Branch</td>
+        </tr>
+        <tr>
+            <td>Section: </td>
+            <td>@student.Section </td>
+        </tr>
+    </table>
+</body>
+</html>

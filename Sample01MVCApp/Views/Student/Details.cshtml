@@ -1,0 +1,37 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+@model Student
+<head>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <h1>@ViewBag.Header</h1>
+    <br />
+    <br />
+    
+    <table>
+        <tr>
+            <td>Student ID: </td>
+            <td>@Model.StudentId</td>
+        </tr>
+        <tr>
+            <td>Name: </td>
+            <td>@Model.Name</td>
+        </tr>
+        <tr>
+            <td>Gender: </td>
+            <td>@Model.Gender </td>
+        </tr>
+        <tr>
+            <td>Branch: </td>
+            <td>@Model.Branch</td>
+        </tr>
+        <tr>
+            <td>Section: </td>
+            <td>@Model.Section </td>
+        </tr>
+    </table>
+</body>
+</html>

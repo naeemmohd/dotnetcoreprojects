@@ -372,7 +372,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/", async context =>
 {
-    int Number1 = 10, Number2 = 10;
+    int Number1 = 10, Number2 = 0;
     int Result = Number1 / Number2; //This statement will throw Runtime Exception
     await context.Response.WriteAsync($"Result : {Result}");
 });
