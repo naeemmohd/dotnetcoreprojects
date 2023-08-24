@@ -20,5 +20,9 @@ namespace Sample01MVCApp.Models
         {
             return DataSource().FirstOrDefault(e => e.StudentId == StudentId) ?? new Student();
         }
+        public List<Student> GetAllStudents()
+        {
+            return DataSource();
+        }
     }
 }

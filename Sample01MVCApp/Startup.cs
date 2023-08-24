@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -49,18 +50,21 @@ namespace Sample01MVCApp
 
             //Adding MVC Middleware
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
+            /*app.UseEndpoints(endpoints =>
             {
                 //Configuring the MVC middleware to the request processing pipeline
                 endpoints.MapDefaultControllerRoute();
             });
-
-            /*app.UseEndpoints(endpoints =>
+            */
+            
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });*/
+                    pattern: "{controller}/{action}/{id:int?}",
+                    defaults: new {Controller = "Home", action = "Index"}
+                );
+            });
         }
     }
 }

@@ -15,15 +15,26 @@ namespace Sample01MVCApp.Controllers
             _studentRepository=studentRepository;
         }
 
-        public IActionResult Index(int Id)
+        [Route("Student/ById")]
+        public IActionResult Index(int Id=101)
         {
             Student student = _studentRepository.GetStudentById(Id);
             return View(student);
         }
-        public string GetAllStudents()
+
+        [Route("Student/ByJSONId/{Id=101}")]
+        public JsonResult GetStudentById(int Id)
         {
-            return "Return All Students";
+            return Json(_studentRepository.GetStudentById(Id));
         }
+
+        [Route("Student/All")]
+        public JsonResult GetAllStudents()
+        {
+            return Json(_studentRepository.GetAllStudents());
+        }
+
+        [Route("Student/ByName/name=naeem")]
         public string GetStudentsByName(string name)
         {
             return $"Return All Students with Name : {name}";
@@ -77,6 +88,53 @@ namespace Sample01MVCApp.Controllers
             
             return View(student);
 
+        }
+        public ViewResult DetailsViewModel()
+        {
+            Student student = new Student()
+            {
+                StudentId = 101,
+                Name = "Dillip",
+                Branch = "CSE",
+                Section = "A",
+                Gender = "Male"
+            };
+            //Student Address
+            Address address = new Address()
+            {
+                StudentId = 101,
+                City = "Mumbai",
+                State = "Maharashtra",
+                Country = "India",
+                Pin = "400097"
+            };
+            
+            StudentDetailsViewModel studentDetailsViewModel = new StudentDetailsViewModel(){
+                Student = student,
+                Address = address,
+                Header="Student Details",
+                Title = "Student Details Page"
+
+            };
+            return View(studentDetailsViewModel);
+
+        }
+        //URL Pattern: /Student/1/Courses
+        [Route("Student/{studentID=101}/Courses")] 
+        public JsonResult GetStudentCourses(int studentID)
+        {
+            //Real-Time you will get the courses from database, here we have hardcoded the data
+            List<string> CourseList = new List<string>();
+            if (studentID == 101)
+                CourseList = new List<string>() { "ASP.NET Core", "C#.NET", "SQL Server" };
+            else if (studentID == 102)
+                CourseList = new List<string>() { "ASP.NET Core MVC", "C#.NET", "ADO.NET Core" };
+            else if (studentID == 103)
+                CourseList = new List<string>() { "ASP.NET Core WEB API", "C#.NET", "Entity Framework Core" };
+            else
+                CourseList = new List<string>() { "Bootstrap", "jQuery", "AngularJs" };
+            
+            return Json(CourseList);
         }
     }
 }

@@ -9,6 +9,7 @@ using Sample01MVCApp.Models;
 
 namespace Sample01MVCApp.Controllers
 {
+    [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -18,11 +19,21 @@ namespace Sample01MVCApp.Controllers
             _logger = logger;
         }
 
+        [Route("/")]
         public IActionResult Index()
         {
+            TempData["AppName"]= "Training App";
+            TempData.Keep();
             return View();
         }
 
+        [Route("/{Id?}")]
+        public IActionResult Index(int Id)
+        {
+            TempData["AppName"]= "Training App " + Id;
+            TempData.Keep();
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
