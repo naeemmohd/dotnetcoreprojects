@@ -26,22 +26,6 @@
             </th>
         </tr>
 
-        <tr>
-            <td>
-                @Model?.ProductID
-            </td>
-            <td>
-                @Model?.Name
-            </td>
-            <td>
-                @Model?.Category
-            </td>
-            <td>
-                @Model?.Description
-            </td>
-            <td>
-                @Model?.Price
-            </td>
-        </tr>
+        @await Html.PartialAsync("_ProductDetails", Model)
     </table>
 </div>

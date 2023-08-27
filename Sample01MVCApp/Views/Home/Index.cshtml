@@ -6,4 +6,52 @@
     <h1>AppName: @TempData["AppName"]</h1>
     <h1 class="display-4">Welcome</h1>
     <p>This is site's Home page.</p>
+    <p>
+        @{
+    var greeting = "Welcome to ASP.NET Core MVC!";
+    var weekDay = DateTime.Now.DayOfWeek;
+    ViewData["Title"] = "Home Page";
+}
+@{
+    var product = new Product()
+            {
+                ProductID = 1000,
+                Name = "Laptop",
+                Description= "Its a Gaming Laptop",
+                Category = "Electronics",
+                Price = 10000
+            };
+}
+<h3>Code Expression</h3>
+<p>@greeting</p>
+<p>@DateTime.Now</p>
+<p>Today is : @weekDay thank you </p>
+<p>Name : @product.Name</p>
+<p>Description : @product.Description</p>
+<p>Price : @product.Price</p>
+    </p>
+
+    <p>
+        @{
+    var productList = new List<Product>()
+    {
+        new Product() { ProductID = 1001, Name = "Laptop", Price = 1000 },
+        new Product() { ProductID = 1002, Name = "Desktop", Price = 2000 },
+        new Product() { ProductID = 1002, Name = "Mobile", Price = 3000 }
+    };
+}
+<table>
+    <thead>
+        <tr><td>ProductID</td><td>Name</td><td>Price</td></tr>
+    </thead>
+    @foreach (Product p in productList)
+    {
+        <tr>
+            <td>@p.ProductID</td>
+            <td>@p.Name</td>
+            <td>@p.Price</td>
+        </tr>
+    }
+</table>
+    </p>
 </div>

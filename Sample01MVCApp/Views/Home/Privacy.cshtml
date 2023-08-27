@@ -6,3 +6,6 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>This is site's Privacy page.</p>
+<p><strong>The TopProducts ViewComponent is called here.</strong></p>
+
+@await Component.InvokeAsync("TopProducts", new { count = 3})

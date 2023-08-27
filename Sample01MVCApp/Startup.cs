@@ -27,6 +27,7 @@ namespace Sample01MVCApp
         {
             services.AddMvc();
             services.AddSingleton<IStudentRepository, StudentRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
             services.AddControllersWithViews();
         }
 

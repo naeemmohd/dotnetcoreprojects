@@ -1,0 +1,32 @@
+@model IEnumerable<Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4>Product List</h4>
+
+<table class="table">
+    <tr>
+        <th>
+            ProductID
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Price
+        </th>
+    </tr>
+
+    @foreach (var product in Model)
+    {
+        <partial name="_ProductDetails" model="product" />
+    }
+</table>
