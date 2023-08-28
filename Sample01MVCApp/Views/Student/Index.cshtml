@@ -5,6 +5,17 @@
 </head>
 <body>
     <br />
+    Enter Student Id : @Html.TextBoxFor(s => s.StudentId, new { @class = "form-control" })
+    <br />
+    Enter Student Name : @Html.TextAreaFor(s => s.Name, new { @class = "form-control" })
+    <br />
+    Select a department : @Html.DropDownList("Departments", new List<SelectListItem>
+    {
+        new SelectListItem { Text = "IT", Value = "1", Selected=true},
+        new SelectListItem { Text = "HR", Value = "2"},
+        new SelectListItem { Text = "Payroll", Value = "3"}
+    }, "Select Department")
+    <br />
     <h1>AppName: @TempData["AppName"]</h1>
     <br />
     <table>
@@ -27,6 +38,29 @@
         <tr>
             <td>Section: </td>
             <td>@Model.Section </td>
+        </tr>
+    </table>
+    <br />
+    <table>
+        <tr>
+            <td>Student ID: </td>
+            <td>@Html.Editor("StudentId")</td>
+        </tr>
+        <tr>
+            <td>Name: </td>
+            <td>@Html.Editor("Name")</td>
+        </tr>
+        <tr>
+            <td>Gender: </td>
+            <td>@Html.Editor("Gender") </td>
+        </tr>
+        <tr>
+            <td>Branch: </td>
+            <td>@Html.Editor("Branch")</td>
+        </tr>
+        <tr>
+            <td>Section: </td>
+            <td>@Html.Editor("Section") </td>
         </tr>
     </table>
 </body>
