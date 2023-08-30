@@ -1,0 +1,3 @@
+1- To add a WebAPI Project - dotnet new webapi -n MyFirstWebAPIProject
+2- To add a Solution - dotnet new sln -n MyFirstWebAPISln
+3- To add a project to solution - dotnet sln MyFirstWebAPISln add MyFirstWebAPIProject
