@@ -15,9 +15,24 @@ builder.Services.AddSwaggerGen(c => {
 	c.CustomSchemaIds(type => type.FullName);
 });
 
+//add EF DB Context
+builder.Services.AddDbContext<EFCoreDbContext>(opt => {
+	opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IStandardRepository, StandardRepository>();
 
 builder.Services.AddTransient<MyCustomMiddleware>();
 
+// add CORS policy 
+builder.Services.AddCors(opt =>
+{
+	opt.AddPolicy("CorsPolicy", policy => 
+	{
+		policy.AllowAnyHeader().AllowAnyMethod();
+	});
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,13 +44,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//use CORS policy
+app.UseCors("CorsPolicy");
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 //app.UseMiddleware<MyCustomMiddleware>();
 // automate EF DB creation
-using var scope = app.Services.CreateScope();
+/*using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<EFCoreDbContext>();
 var logger = services.GetRequiredService<ILogger<Program>>();
@@ -48,4 +66,15 @@ catch (Exception ex)
 {
     logger.LogError(ex, "An error occurred during migration");
 }
+*/
+
+//testing EF save
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<EFCoreDbContext>();
+
+EFCoreDbContextSeed.Seed(context);
+
+
+
 app.Run();

@@ -1,3 +1,12 @@
 1- To add a WebAPI Project - dotnet new webapi -n MyFirstWebAPIProject
 2- To add a Solution - dotnet new sln -n MyFirstWebAPISln
 3- To add a project to solution - dotnet sln MyFirstWebAPISln add MyFirstWebAPIProject
+
+Enity Framwork
+for scaffolding EF code migration - 
+ tool - dotnet tool install --global dotnet-ef --version 7.0.10
+ migration - dotnet ef migrations add InitialCreate -o Data/Migrations
+ create/update DB - dotnet ef database update
+ for dropping an exiting database - dotnet ef database drop -p InfraStructure -s API
+ for dropping an exiting migration - dotnet ef migrations remove -p InfraStructure -s API
+ for adding new migration - dotnet ef migrations add InitialCreate -p InfraStructure -s API -o Data/Migrations
