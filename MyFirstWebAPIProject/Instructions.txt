@@ -10,3 +10,159 @@ for scaffolding EF code migration -
  for dropping an exiting database - dotnet ef database drop -p InfraStructure -s API
  for dropping an exiting migration - dotnet ef migrations remove -p InfraStructure -s API
  for adding new migration - dotnet ef migrations add InitialCreate -p InfraStructure -s API -o Data/Migrations
+
+DBContext 
+- database context class which allows to query and save data.
+- Add, AddSync, AddRange
+- Remove, RemoveRange
+- Find, FindAsync
+- SaveChanges, SaveChangesAsync
+- Update, UpdateRange
+- OnConfiguring - configure database options
+- OnModelCreating - configure model options
+
+EF Migrations:
+- To add migrations - dotnet ef migrations add CreateEFCoreDB1
+- to create/update databae - dotnet ef database update
+
+To add DB context to the middle ware:
+- add EF DB Context to Program.cs
+builder.Services.AddDbContext<EFCoreDbContext>(opt => {
+	opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+
+- Entity states - represents state of an entity
+ - Added - entity being tracked and is new, will be added
+ - Modified - entity being tracked and is existing, will be modified
+ - Deleted - entity being tracked and is marked for deletion, will be deleted
+ - Attached - entity being tracked, will be saved based on state
+ - Detach - entity is not tracked and changes will not be saved
+ - Unchanged - entity being tracked, but no changes made
+
+LINQ to Entities
+- a query syntax that allows us to query the data from heterogenous DB sources
+- LINQ Query Methods - 
+    - First() or FirstOrDefault()
+    - Single()or SingleOrDefault()
+    - ToList()
+    - Count()
+    - Min() and Max()
+    - Sum()
+    - Distinct()
+    - Last() or LastOrDefault()
+    - Average()
+    - Find()
+
+Eager Loading
+ - a technique used to load related entities along with the main entity in a single query
+ - reduce the number of database queries and improve performance
+ - Include() and/or Then Include() extensions are used like this -
+    public List<Student> GetStudents()
+        {
+            //FormattableString sql = $"Select * from Students";
+            return _context.Students
+                // Eager loading related entities
+                //.FromSql(sql)
+                .Include(std => std.Standard)
+                .Include(addr => addr.StudentAddress)
+                .Include(crs => crs.Courses)
+                .ToList();
+        }
+ - Merits - 
+    - Fetching Related Data
+    - Data-Heavy Operations
+    - Read-Intensive Scenarios
+    - Batch Operations
+ - Demerits - 
+    - Not good if high volume of data
+    - Complexity for - Deeply nested or complex object graphs
+
+
+Lazy Loading 
+- loads the related entities on demand only
+- related entities or child entities are loaded only when it is being accessed for the first time
+- How to Implement 
+    - Lazy loading With Proxies 
+        - Install Proxies Package, 
+        - Enable Lazy Loading using UseLazyLoadingProxies
+        - Mark the Property as Virtual
+    - Lazy loading Without Proxies
+        - using ILazyLoader
+        - example - 
+        //Public Setter and Getter Property for the Private _StudentAddress Field
+        public StudentAddress StudentAddress
+        {
+            get => _lazyLoader.Load(this, ref _StudentAddress);
+            set => _StudentAddress = value;
+        }
+- Example
+    //use of Lazy Loading 
+    //1. Loading student ddata only at first
+    var student = _context.Students.Find(id);
+    //2. Loading related data now 
+    // it will execute Separate SQL query
+    StudentAddress? studentAddress = student?.StudentAddress;
+    Console.WriteLine($"AddresLin1 {studentAddress?.Address1}, AddresLin2 {studentAddress?.Address2}");
+    Standard? standard = student?.Standard;
+    Console.WriteLine($"StandardName: {standard?.StandardName}, Description: {standard?.Description}");
+- Advantages -
+    - On-Demand Data Loading
+    - Reduced Initial Query Time
+    - Optimal Memory usage 
+- Disadvantages - 
+    - Unpredictable Timing of Data Retrieval
+    - Inefficient Use of Database Resources - as one query fired at a time only
+
+
+Default Entity Framework Core Conventions
+- all items created from CustomSchemaIds
+- all DBset objects become tables
+- primary key column will be automatically generated for a property named “Id” 
+  - or “<Entity Class Name> + Id”
+  - e.g for Student - it can be Id or StudentId
+- each refrence to related entity become foreign key
+- will create a null column for all reference type unless specified explicitly
+
+
+Data Annonations in EF
+- Attributes or Classes that can be applied to our domain classes and their properties 
+- e.g Table, Column, ForeginKey, Index, Required, MinLength, MaxLength etc
+- examples
+    [Table("StudentInfo", Schema = "Admin")]
+    public class Student
+    {
+        //Primary Key: Order Must be 0
+        [Column(Order = 0)]
+        [Key]
+        [Required]
+        [MaxLength(10), MinLength(5)]
+        public int StudentId { get; set; }
+        [Column(Order = 2)]
+        public string? FirstName { get; set; }
+        [Column("LName", Order = 4)]
+        public string? LastName { get; set; }
+        [Column("DOB", Order = 3, TypeName = "DateTime2")]
+        public DateTime DateOfBirth { get; set; }
+        [Column(Order = 1)]
+        public string? Mobile { get; set; }
+        [ForeignKey("Standard")]
+        public int StandardId { get; set; }
+        //Applying NotMapped Attribute in Properties
+        //For the following Property, no database column will be created 
+        [NotMapped]
+        public int RegistrationNumber { get; set; }
+    }
+
+Relationships in EF
+- HasOne(): this entity type has a reference that points to a single instance of the other entity
+- WithOne(): Configures this as a one-to-one relationship.
+- HasForeignKey(): configures the property(s) to use as the foreign key for this relationship. 
+- IsRequired(): It configures whether this is a required relationship
+- e.g.
+    // Configure One to One Relationships Between Student and Address
+    modelBuilder.Entity<Student>()
+    .HasOne(s => s.Address) //Student has one Address
+    .WithOne(ad => ad.Student) //Address is associated with one Student
+    .HasForeignKey<Address>(ad => ad.AddressId) //Foreign key in Address table
+    .IsRequired(); //This is a required relationship.

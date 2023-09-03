@@ -1,15 +1,12 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace MyFirstWebAPIProject.Entities
 {
-    public class Student
+    public class Teacher
     {
-        public int StudentId { get; set; }
+        public int TeacherId { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public int? StandardId { get; set; }
-        public virtual Standard? Standard { get; set; }
-        public virtual StudentAddress? StudentAddress { get; set; }
         public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
+        public virtual Standard? Standard { get; set; }
     }
 }

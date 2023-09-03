@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using MyFirstWebAPIProject.Controllers;
 using MyFirstWebAPIProject.Entities;
@@ -5,7 +6,9 @@ using MyFirstWebAPIProject.Entities;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
@@ -73,8 +76,7 @@ using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<EFCoreDbContext>();
 
-EFCoreDbContextSeed.Seed(context);
-
-
+//For seeding data //commented to manually enter data for time being
+//EFCoreDbContextSeed.Seed(context);
 
 app.Run();

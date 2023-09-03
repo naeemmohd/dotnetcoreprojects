@@ -8,6 +8,7 @@ namespace MyFirstWebAPIProject.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
+	[ApiExplorerSettings(IgnoreApi = true)]
 	public class TestController : ControllerBase
 	{
 		[HttpGet]
