@@ -2,17 +2,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MyFirstWebAPIProject.Entities
 {
-    public class EFCoreDbContext : DbContext
+    public class EFCoreDbContext : DbContext    
     {
         protected EFCoreDbContext() : base()
+        {
+        }
+        protected EFCoreDbContext(DbContextOptions options) : base(options)
         {
         }
 
         //OnConfiguring() method is used to select and configure the data source
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //use this to configure the context
-            optionsBuilder.UseSqlite("Data source=mysqldb.db");
+            if (!optionsBuilder.IsConfigured)
+            {
+                //use this to configure the context
+                optionsBuilder.UseSqlite("Data source=mysqldb.db");
+            }
         }
 
         //OnModelCreating() method is used to configure the model using ModelBuilder Fluent API
